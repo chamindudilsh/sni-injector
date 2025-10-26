@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=SNI Injector
+Type=Application
+Version=1.0
+Comment=SNI Injector (main.py + ssh.sh) with proxy
+Terminal=false
+Exec=/home/phoenix/Software/sni-injector/sni-launcher.sh
+Path=/home/phoenix/Software/sni-injector
+PrefersNonDefaultGPU=false
+Icon=network-transmit-receive-symbolic
+Categories=Network;Utility;

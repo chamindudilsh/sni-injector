@@ -1,0 +1,7 @@
+ssh
+sshpass
+python3
+tmux
+zenity
+
+gsettings
