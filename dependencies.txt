@@ -1,6 +1,7 @@
 ssh
 sshpass
 python3
+git
 tmux
 zenity
 
