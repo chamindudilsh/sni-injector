@@ -4,5 +4,5 @@ python3
 tmux
 zenity
 
-# on GNOME based (Ubuntu/Mint)
+# on GNOME based distros (Ubuntu/Mint)
 gsettings
