@@ -6,7 +6,7 @@
    <a href="#introduction">Introduction</a>
 </p>
 
-## Introduction
+## 💻 Introduction
 
 ### What is SNI?
 
@@ -32,8 +32,79 @@ What if we can modify our SNI and gain access to different sites? Yes! we can. H
 To do so, we need to install a proxy on our server and enable TLS encryption. We can use an SSH tunnel to access a proxy that is already installed on the server. And stunnel can be used to add TLS encryption to that connection.
 <img src="https://github.com/miyurudassanayake/sni-injector/blob/master/static/stunnel.png" width="80%">
 
-# Installation
+# 🚀 Installation
 
+Check `dependencies.txt` to see Linux dependencies. Install them to work properly.
+
+---
+## Ubuntu / Mint
+
+1. Clone the repository.<br>
+   ```console
+   git clone https://github.com/chamindudilsh/sni-injector.git
+   ```
+2. Add your SNI host and SSH settings to `settings.ini` <br>
+
+   <img src="https://github.com/chamindudilsh/sni-injector/blob/17bad5b2beba9905dba96f9c5e0f266f9e322787/static/settings.png">
+
+> [!NOTE]
+> If you wish to use manual login for SSH, uncomment `ssh ` and comment `sshpass ` in `ssh.sh`
+   
+3. Make `ssh.sh`, `run_sni.sh` and `sni-launcher.sh` executable. (First time only)
+   ```console
+   chmod +x ssh.sh
+   chmod +x run_sni.sh
+   chmod +x sni-launcher.sh
+   ```
+4. Run `sni-launcher.sh` (Uses a simple zenity GUI + gsettings)
+
+   ```console
+   bash ./sni-launcher.sh
+   ```
+   Or
+   
+   These also work (No GUI)
+
+   ```console
+   bash ./run_sni.sh start
+   bash ./run_sni.sh stop
+   ```
+
+---
+## Linux (If `gsettings` isn't available on your distro)
+
+1. Clone the repository.<br>
+   ```console
+   git clone https://github.com/chamindudilsh/sni-injector.git
+   ```
+2. Add your SNI host and SSH settings to `settings.ini` <br>
+
+   <img src="https://github.com/chamindudilsh/sni-injector/blob/17bad5b2beba9905dba96f9c5e0f266f9e322787/static/settings.png">
+
+> [!NOTE]
+> If you wish to use manual login for SSH, uncomment `ssh ` and comment `sshpass ` in `ssh.sh`
+   
+3. Make `ssh.sh`, `run_sni.sh` and `sni-launcher.sh` executable. (First time only)
+   ```console
+   chmod +x ssh.sh
+   ```
+4. Run python script. <br>
+   ```console
+   python3 main.py
+   ```
+5. Run ssh command. (or run <b>ssh.sh </b> file.)<br>
+   ```console
+   ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+   ```
+   <i>or </i><br>
+   ```console
+   sshpass -p [password] ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+   ```
+5. Add socks5 proxy and Enjoy!<br>
+   `host: localhost/127.0.0.1`<br>
+   `port: 1080`
+
+---
 ## Windows
 
 1. Clone the repository.<br><br>
@@ -43,6 +114,9 @@ To do so, we need to install a proxy on our server and enable TLS encryption. We
    ```
 3. Add your SNI host and ssh host to <code>settings.ini </code><br>
    <img src="https://user-images.githubusercontent.com/90369043/184321639-3340d961-8971-43ef-824e-3b47638251b2.png" width="200px"><br>
+> [!NOTE]
+> You will have to enter ssh username, password and port in the command.
+
 4. Run Python script.<br>
    ```console
    python3 main.py
@@ -59,32 +133,6 @@ To do so, we need to install a proxy on our server and enable TLS encryption. We
 
 <br>
 
-## Linux
-
-1. Clone the repository.<br>
-   ```console
-   git clone https://github.com/miyurudassanayake/sni-injector.git
-   ```
-2. Add your SNI host and ssh host to <code> settings.ini </code><br>
-   <img src="https://user-images.githubusercontent.com/90369043/184321639-3340d961-8971-43ef-824e-3b47638251b2.png" width="200px"><br>
-3. Run python script. <br>
-   ```console
-   python3 main.py
-   ```
-4. Run ssh command. (or run <b>ssh.sh </b> file.)<br>
-   ```console
-   ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-   ```
-   <i>or </i><br>
-   ```console
-   sshpass -p [password] ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-   ```
-5. Add socks5 proxy and Enjoy!<br>
-   <code>host: localhost/127.0.0.1 </code><br>
-   <code>port: 1080 </code>
-
-<br>
-
-## Stargazers over time
+## Stargazers over time (On original repo)
 
 [![Stargazers over time](https://starchart.cc/miyurudassanayake/sni-injector.svg)](https://github.com/miyurudassanayake/sni-injector)
