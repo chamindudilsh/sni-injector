@@ -31,7 +31,6 @@ get_ini_value() {
     }
   ' "$file" 2>/dev/null || true)
 
-  # If empty, return empty
   if [ -z "${raw:-}" ]; then
     printf '%s' ""
     return
@@ -64,11 +63,8 @@ USERNAME=$(get_ini_value "$INI_FILE" "ssh" "username")
 PASSWORD=$(get_ini_value "$INI_FILE" "ssh" "password")
 PORT=$(get_ini_value "$INI_FILE" "ssh" "port")
 
-echo "Parsed values:"
-echo "  host    = '$HOST'"
-echo "  username= '$USERNAME'"
-echo "  password= '[REDACTED]'"
-echo "  port    = '$PORT'"
+LOCAL_IP=$(get_ini_value "$INI_FILE" "settings" "local_ip")
+LISTEN_PORT=$(get_ini_value "$INI_FILE" "settings" "listen_port")
 
 # sanitize PORT to only allow digits
 PORT_SANITIZED=$(printf '%s' "$PORT" | sed -E 's/[^0-9].*//g')
@@ -80,10 +76,12 @@ fi
 
 echo "Using port: '$PORT_SANITIZED'"
 
+echo "${LOCAL_IP}":"${LISTEN_PORT}"
+
 # Auto login with password
 
-sshpass -p "${PASSWORD}" ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" "${USERNAME}"@"${HOST}" -p "${PORT_SANITIZED}" -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+sshpass -p "${PASSWORD}" ssh -C -o "ProxyCommand=nc -X CONNECT -x "${LOCAL_IP}":"${LISTEN_PORT}" %h %p" "${USERNAME}"@"${HOST}" -p "${PORT_SANITIZED}" -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
 
 # Manual login
 
-#ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" "$USERNAME"@"$HOST" -p "$PORT"  -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+#ssh -C -o "ProxyCommand=nc -X CONNECT -x "${LOCAL_IP}":"${LISTEN_PORT}" %h %p" "${USERNAME}"@"${HOST}" -p "${PORT_SANITIZED}" -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
