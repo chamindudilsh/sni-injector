@@ -85,14 +85,25 @@ Check `dependencies.txt` to see Linux dependencies. Install them for this to wor
    ```console
    python3 main.py
    ```
-6. Run ssh command. (or run <b>ssh.sh </b> file.)<br>
+> [!IMPORTANT]
+> It's important that `main.py` should run before `ssh.sh`
+
+6. Run `ssh.sh` file.
    ```console
-   ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+   bash ./ssh.sh
    ```
-   <i>or </i><br>
+    <b>OR run one of following commands with args </b>
+
+   <i>Auto login (with ssh password)</i>
    ```console
-   sshpass -p [password] ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+   sshpass -p [password] ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p [port] -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
    ```
+   
+   <i>Manual login (without ssh password in command)</i>   
+   ```console
+   ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p [port] -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+   ```
+   
 5. Add socks5 proxy and Enjoy!<br>
    `host: localhost/127.0.0.1`<br>
    `port: 1080`
