@@ -13,8 +13,10 @@ It works pretty easy on Ubuntu/Mint where gsettings is available.
 You can add this to start menu by copying `sni-injector.desktop` to `~/.local/share/applications` <br>
 Make sure to edit `Exec=` and `Path=` as necessary.
 
-If your distro doesn't have `gsettings`, you might have to modify `run_sni.sh` with it's equivalent or,
-You will have to manually run 2 scripts (main.py & ssh.sh) and set socks proxy.
+### If you are on a GNOME Based distro (Ubuntu, Mint, etc.), this script will take care of everything like setting up listener, ssh and setting socks proxy.
+
+If you are on KDE or some other distro where `gsettings` isn't available, this will take care of everything **except** socks proxy.
+
 Check the installation guide.
 
 ---
