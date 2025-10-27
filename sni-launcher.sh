@@ -25,11 +25,11 @@ else
 fi
 
 # Show Zenity dialog with status
-CHOICE=$(zenity --width=400 --height=220 --list --radiolist \
+CHOICE=$(zenity --width=400 --height=350 --list --radiolist \
   --title="SNI Injector Launcher" \
-  --text="SNI Injector Status:\n\nTmux session: $TMUX_STATUS\nSystem proxy: $PROXY_STATUS\n\nFor Logs: tmux attach -t sni-injector\n\nChoose an action:" \
+  --text="SNI Injector Status:\n\nTmux session: $TMUX_STATUS\nSystem proxy: $PROXY_STATUS\n\nFor Logs: tmux attach -t ${SESSION}\n\nChoose an action:" \
   --column="Select" --column="Action" \
-  TRUE "Start" FALSE "Stop" \
+  TRUE "Start" FALSE "Stop" FALSE "Status"\
   --separator=":")
 
 # handle cancel
@@ -42,16 +42,37 @@ if [[ "$CHOICE" == *Start* ]]; then
   ACTION="start"
 elif [[ "$CHOICE" == *Stop* ]]; then
   ACTION="stop"
+elif [[ "$CHOICE" == *Status* ]]; then
+  ACTION="status"
 else
   exit 0
 fi
 
 # Run the actual script
 if [[ "$ACTION" == "start" ]]; then
-  SOCKS_PORT=1080
-  "$SNI_SCRIPT" start "$SOCKS_PORT"
+  # SOCKS_PORT=1080
+  "$SNI_SCRIPT" start
+  if [ $? -eq 0 ]; then
+    zenity --title="SNI Injector" --info --text="Tmux session '${SESSION}' started.\nAttach to see logs:\n\ntmux attach -t ${SESSION}"
+  else
+    zenity --title="SNI Injector" --error --text="Failed to start sni-injector. Check logs or run the script from a terminal for details."
+  fi
+
 elif [[ "$ACTION" == "stop" ]]; then
   "$SNI_SCRIPT" stop
+  rc=$?
+  if [ $rc -eq 0 ]; then
+    zenity --title="SNI Injector" --info --text="Tmux session stopped.\nReset system proxy successfully."
+  else
+    zenity --title="SNI Injector" --error --text="Stop failed (exit code $rc). Check ./"$SNI_SCRIPT" output for details."
+  fi
+elif [[ "$ACTION" == "status" ]]; then
+    if command -v gnome-terminal >/dev/null 2>&1; then
+        gnome-terminal -- tmux attach -t "${SESSION}"
+    elif command -v x-terminal-emulator >/dev/null 2>&1; then
+        x-terminal-emulator -e "tmux attach -t ${SESSION}"
+    else
+        zenity --title="SNI Injector" --error --text="No Terminals found. run './"$SNI_SCRIPT" status' manually."
+    fi
 fi
-
 
