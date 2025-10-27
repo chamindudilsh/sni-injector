@@ -22,7 +22,7 @@ Check the installation guide.
 
 Check `dependencies.txt` to see Linux dependencies. Install them for this to work properly.
 
-## Ubuntu / Mint
+## Ubuntu / Mint (GNOME Based)
 
 1. Clone the repository.<br>
    ```console
@@ -61,7 +61,7 @@ Check `dependencies.txt` to see Linux dependencies. Install them for this to wor
 ---
 ## Linux 
 
-*(If `gsettings` isn't available on your distro)*
+*(No GUI)*
 
 1. Clone the repository.<br>
 
@@ -80,33 +80,20 @@ Check `dependencies.txt` to see Linux dependencies. Install them for this to wor
    
    ```console
    chmod +x ssh.sh
+   chmod +x run_sni.sh
    ```
-5. Run python script. <br>
-   ```console
-   python3 main.py
-   ```
-> [!IMPORTANT]
-> It's important that `main.py` should run before `ssh.sh`
 
-6. Run `ssh.sh` file.
-   ```console
-   bash ./ssh.sh
+4. Run `run_sni.sh` file.
    ```
-    <b>OR run one of following commands with args </b>
+   bash ./run_sni.sh start
+   ```
+   ✅ Now if you see `INFO: Setting system proxy (GUI) to SOCKS ${host}:${port}...` in the terminal, You are good to go, the script will take care of proxy automatically.
 
-   <i>Auto login (with ssh password)</i>
-   ```console
-   sshpass -p [password] ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p [port] -v -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-   ```
+   ⚠️ If you see `Skipping GNOME gsettings — not available or not writable.` instead, you will have to manually set the following proxy settings in your DE. the script will only take care of proxy env vars.
    
-   <i>Manual login (without ssh password in command)</i>   
-   ```console
-   ssh -C -o "ProxyCommand=nc -X CONNECT -x 127.0.0.1:9092 %h %p" [username]@[host] -p [port] -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-   ```
-   
-5. Add socks5 proxy and Enjoy!<br>
-   `host: localhost/127.0.0.1`<br>
-   `port: 1080`
+      4.1. Set socks5 proxy (Only if skipped by the script)<br>
+         `host: localhost/127.0.0.1`<br>
+         `port: 1080`
 
 ---
 ## Windows
@@ -129,14 +116,15 @@ Check `dependencies.txt` to see Linux dependencies. Install them for this to wor
    python3 main.py
    ```
 5. Install nmap. *(you need ncat for run this script)*.<br>
-   nmap download [page](https://nmap.org/dist/).<br><br>
+   nmap download [page](https://nmap.org/dist/).<br>
+   
 6. Run ssh command.
    ```console
    ssh -C -o "ProxyCommand=ncat --proxy 127.0.0.1:9092 %h %p" [username]@[host] -p 443 -CND 1080 -o StrictHostKeyChecking=no -o UserKnownHostsFile=nul
    ```
-7. Add socks5 proxy and Enjoy!<br>
-   <code>host: localhost/127.0.0.1 </code><br>
-   <code>port: 1080 </code>
+7. Add socks5 proxy <br>
+   `host: localhost/127.0.0.1`<br>
+   `port: 1080`
    
 ---
 ## 💻 How it works
